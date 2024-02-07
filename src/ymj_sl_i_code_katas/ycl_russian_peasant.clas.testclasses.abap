@@ -22,7 +22,7 @@ ENDCLASS.
 CLASS ltcl_russian_multiplication IMPLEMENTATION.
 
   METHOD setup.
-    CREATE OBJECT go_cut TYPE (cv_class_name).
+    go_cut = NEW ycl_russian_peasant( ).
   ENDMETHOD.
 
   METHOD check_multiplicate_1_30.

@@ -1,4 +1,4 @@
-CLASS ycl_russian_multiplication DEFINITION
+CLASS ycl_russian_peasant DEFINITION
   PUBLIC
   CREATE PUBLIC .
 
@@ -8,15 +8,16 @@ CLASS ycl_russian_multiplication DEFINITION
     ALIASES multiplicate FOR yif_russian_peasant_multipl~multiplicate.
     ALIASES print        FOR yif_russian_peasant_multipl~print.
 
+    CLASS-METHODS create_object RETURNING VALUE(result) TYPE REF TO ycl_russian_peasant.
+
+
   PROTECTED SECTION.
     TYPES: BEGIN OF ts_numbers,
              column_left  TYPE int4,
              column_right TYPE int4,
            END OF ts_numbers.
     TYPES: tt_numbers TYPE STANDARD TABLE OF ts_numbers WITH NON-UNIQUE KEY column_left.
-    METHODS delete_not_relevant_numbers
-      CHANGING
-        ct_numbers TYPE tt_numbers.
+    METHODS delete_not_relevant_numbers RETURNING VALUE(result) TYPE tt_numbers.
 
     METHODS is_left_number_dividable_by_2
       IMPORTING
@@ -43,8 +44,6 @@ CLASS ycl_russian_multiplication DEFINITION
         VALUE(rv_result) TYPE int4.
 
     METHODS add_numbers_table
-      CHANGING
-        ct_numbers TYPE tt_numbers
       RAISING
         ycx_russian_peasant_multipl.
 
@@ -56,10 +55,8 @@ CLASS ycl_russian_multiplication DEFINITION
 
     METHODS create_1th_line_numbers_table
       IMPORTING
-        iv_number_one           TYPE int4
-        iv_number_two           TYPE int4
-      RETURNING
-        VALUE(rt_numbers_table) TYPE tt_numbers.
+        iv_number_one TYPE int4
+        iv_number_two TYPE int4.
 
     METHODS check_input_numbers_are_valid
       IMPORTING
@@ -67,6 +64,8 @@ CLASS ycl_russian_multiplication DEFINITION
                 iv_number_two TYPE int4
       RAISING   ycx_russian_peasant_multipl.
   PRIVATE SECTION.
+    CLASS-DATA russian_multiplication TYPE REF TO ycl_russian_peasant.
+    DATA: numbers TYPE tt_numbers.
 
     METHODS calculate_right_number
       IMPORTING
@@ -80,36 +79,31 @@ ENDCLASS.
 
 
 
-CLASS ycl_russian_multiplication IMPLEMENTATION.
+CLASS ycl_russian_peasant IMPLEMENTATION.
 
   METHOD multiplicate.
-
-    DATA: lt_numbers TYPE tt_numbers.
-
     check_input_numbers_are_valid(
       iv_number_one = iv_number_one
       iv_number_two = iv_number_two ).
 
-    lt_numbers = create_1th_line_numbers_table( iv_number_one = iv_number_one
-                                                iv_number_two = iv_number_two ).
+    create_1th_line_numbers_table( iv_number_one = iv_number_one
+                                   iv_number_two = iv_number_two ).
 
-    add_numbers_table( CHANGING ct_numbers = lt_numbers ).
+    add_numbers_table( ).
 
-    delete_not_relevant_numbers( CHANGING ct_numbers = lt_numbers ).
-
-    rv_result = calculate_result( lt_numbers ).
+    rv_result = calculate_result( delete_not_relevant_numbers( ) ).
 
   ENDMETHOD.
 
   METHOD delete_not_relevant_numbers.
     DATA:
-      ls_numbers TYPE ts_numbers,
       lv_tabix   TYPE sy-tabix.
 
-    LOOP AT ct_numbers INTO ls_numbers.
+    result = numbers.
+    LOOP AT result INTO DATA(ls_numbers).
       lv_tabix = sy-tabix.
       CHECK is_left_number_dividable_by_2( ls_numbers-column_left ) = abap_true.
-      DELETE ct_numbers INDEX lv_tabix.
+      DELETE result INDEX lv_tabix.
     ENDLOOP.
   ENDMETHOD.
 
@@ -140,14 +134,10 @@ CLASS ycl_russian_multiplication IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_numbers_table.
-    DATA:
-      ls_numbers TYPE ts_numbers.
-
-    LOOP AT ct_numbers INTO ls_numbers.
+    LOOP AT numbers INTO DATA(ls_numbers).
       CHECK continue_algorithm( ls_numbers-column_left ) = abap_true.
-      ls_numbers-column_left  = calculate_left_number( ls_numbers-column_left ).
-      ls_numbers-column_right = calculate_right_number( ls_numbers-column_right ).
-      APPEND ls_numbers TO ct_numbers.
+      APPEND VALUE ts_numbers( column_left  = calculate_left_number( ls_numbers-column_left )
+                               column_right = calculate_right_number( ls_numbers-column_right ) ) TO numbers.
     ENDLOOP.
   ENDMETHOD.
 
@@ -173,13 +163,8 @@ CLASS ycl_russian_multiplication IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD create_1th_line_numbers_table.
-    DATA:
-      ls_numbers TYPE ts_numbers.
-
-    ls_numbers-column_left  = iv_number_one.
-    ls_numbers-column_right = iv_number_two.
-    APPEND ls_numbers TO rt_numbers_table.
-
+    APPEND VALUE ts_numbers( column_left  = iv_number_one
+                             column_right = iv_number_two ) TO numbers.
   ENDMETHOD.
 
   METHOD check_input_numbers_are_valid.
@@ -204,6 +189,12 @@ CLASS ycl_russian_multiplication IMPLEMENTATION.
 
   METHOD print.
 *    WRITE: 'Das Ergebnis lautet:', 30 iv_number.
+  ENDMETHOD.
+
+  METHOD create_object.
+    " Factory Method (Singleton)
+    result = russian_multiplication = COND #( WHEN russian_multiplication IS BOUND THEN russian_multiplication
+                                              ELSE NEW ycl_russian_peasant( ) ).
   ENDMETHOD.
 
 ENDCLASS.

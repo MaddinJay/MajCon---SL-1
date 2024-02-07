@@ -11,13 +11,15 @@ CLASS ycx_russian_peasant_multipl DEFINITION
 
     METHODS constructor
       IMPORTING
-        !textid   LIKE if_t100_message=>t100key OPTIONAL
-        !previous LIKE previous OPTIONAL
-        message   TYPE string.
-    METHODS get_message RETURNING VALUE(result) TYPE string.
+        textid   LIKE if_t100_message=>t100key OPTIONAL
+        previous LIKE previous OPTIONAL
+        message  TYPE string .
+    METHODS get_message
+      RETURNING
+        VALUE(result) TYPE string.
   PROTECTED SECTION.
   PRIVATE SECTION.
-    DATA mv_message TYPE string.
+    DATA message TYPE string.
 ENDCLASS.
 
 
@@ -36,11 +38,11 @@ CLASS ycx_russian_peasant_multipl IMPLEMENTATION.
       if_t100_message~t100key = textid.
     ENDIF.
 
-    mv_message = message.
+    me->message = message.
   ENDMETHOD.
 
   METHOD get_message.
-    result = mv_message.
+    result = me->message.
   ENDMETHOD.
 
 ENDCLASS.
