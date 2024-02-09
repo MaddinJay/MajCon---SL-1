@@ -4,12 +4,8 @@ CLASS ycl_russian_peasant DEFINITION
 
 
   PUBLIC SECTION.
-    INTERFACES yif_russian_peasant_multipl.
-    ALIASES multiplicate FOR yif_russian_peasant_multipl~multiplicate.
-    ALIASES print        FOR yif_russian_peasant_multipl~print.
-
-    CLASS-METHODS create_object RETURNING VALUE(result) TYPE REF TO ycl_russian_peasant.
-
+    INTERFACES yif_multiplication.
+    ALIASES multiplicate FOR yif_multiplication~multiplicate.
 
   PROTECTED SECTION.
     TYPES: BEGIN OF ts_numbers,
@@ -17,77 +13,52 @@ CLASS ycl_russian_peasant DEFINITION
              column_right TYPE int4,
            END OF ts_numbers.
     TYPES: tt_numbers TYPE STANDARD TABLE OF ts_numbers WITH NON-UNIQUE KEY column_left.
+
     METHODS delete_not_relevant_numbers RETURNING VALUE(result) TYPE tt_numbers.
 
-    METHODS is_left_number_dividable_by_2
-      IMPORTING
-        iv_number        TYPE int4
-      RETURNING
-        VALUE(rv_result) TYPE abap_bool.
+    METHODS is_left_number_dividable_by_2 IMPORTING iv_number        TYPE int4
+                                          RETURNING VALUE(rv_result) TYPE abap_bool.
 
-    METHODS calculate_result
-      IMPORTING
-        it_numbers       TYPE tt_numbers
-      RETURNING
-        VALUE(rv_result) TYPE int4.
+    METHODS calculate_result              IMPORTING it_numbers       TYPE tt_numbers
+                                          RETURNING VALUE(rv_result) TYPE int4.
 
-    METHODS calculate_left_number
-      IMPORTING
-        iv_number        TYPE int4
-      RETURNING
-        VALUE(rv_result) TYPE int4.
+    METHODS calculate_left_number         IMPORTING iv_number        TYPE int4
+                                          RETURNING VALUE(rv_result) TYPE int4.
 
-    METHODS round_off_number
-      IMPORTING
-        iv_number        TYPE decfloat16
-      RETURNING
-        VALUE(rv_result) TYPE int4.
+    METHODS round_off_number              IMPORTING iv_number        TYPE decfloat16
+                                          RETURNING VALUE(rv_result) TYPE int4.
 
-    METHODS add_numbers_table
-      RAISING
-        ycx_russian_peasant_multipl.
+    METHODS add_numbers_table             RAISING ycx_russian_peasant_multipl.
 
-    METHODS continue_algorithm
-      IMPORTING
-        iv_number        TYPE int4
-      RETURNING
-        VALUE(rv_result) TYPE abap_bool.
+    METHODS continue_algorithm            IMPORTING iv_number        TYPE int4
+                                          RETURNING VALUE(rv_result) TYPE abap_bool.
 
-    METHODS create_1th_line_numbers_table
-      IMPORTING
-        iv_number_one TYPE int4
-        iv_number_two TYPE int4.
+    METHODS create_1th_line_numbers_table IMPORTING iv_number_one TYPE int4
+                                                    iv_number_two TYPE int4.
 
-    METHODS check_input_numbers_are_valid
-      IMPORTING
-                iv_number_one TYPE int4
-                iv_number_two TYPE int4
-      RAISING   ycx_russian_peasant_multipl.
+    METHODS check_input_numbers_are_valid IMPORTING iv_number_one TYPE int4
+                                                    iv_number_two TYPE int4
+                                          RAISING   ycx_russian_peasant_multipl.
+
   PRIVATE SECTION.
-    CLASS-DATA russian_multiplication TYPE REF TO ycl_russian_peasant.
     DATA: numbers TYPE tt_numbers.
 
-    METHODS calculate_right_number
-      IMPORTING
-        iv_number        TYPE int4
-      RETURNING
-        VALUE(rv_result) TYPE int4
-      RAISING
-        ycx_russian_peasant_multipl.
+    METHODS calculate_right_number        IMPORTING iv_number        TYPE int4
+                                          RETURNING VALUE(rv_result) TYPE int4
+                                          RAISING
+                                                    ycx_russian_peasant_multipl.
 
 ENDCLASS.
-
-
 
 CLASS ycl_russian_peasant IMPLEMENTATION.
 
   METHOD multiplicate.
     check_input_numbers_are_valid(
-      iv_number_one = iv_number_one
-      iv_number_two = iv_number_two ).
+      iv_number_one = number_one
+      iv_number_two = number_two ).
 
-    create_1th_line_numbers_table( iv_number_one = iv_number_one
-                                   iv_number_two = iv_number_two ).
+    create_1th_line_numbers_table( iv_number_one = number_one
+                                   iv_number_two = number_two ).
 
     add_numbers_table( ).
 
@@ -185,16 +156,6 @@ CLASS ycl_russian_peasant IMPLEMENTATION.
         EXPORTING
           message = lv_message.
     ENDIF.
-  ENDMETHOD.
-
-  METHOD print.
-*    WRITE: 'Das Ergebnis lautet:', 30 iv_number.
-  ENDMETHOD.
-
-  METHOD create_object.
-    " Factory Method (Singleton)
-    result = russian_multiplication = COND #( WHEN russian_multiplication IS BOUND THEN russian_multiplication
-                                              ELSE NEW ycl_russian_peasant( ) ).
   ENDMETHOD.
 
 ENDCLASS.
