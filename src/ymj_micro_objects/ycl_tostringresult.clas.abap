@@ -1,4 +1,4 @@
-CLASS ymj_tostringresult DEFINITION INHERITING FROM ymj_result
+CLASS ycl_tostringresult DEFINITION INHERITING FROM ycl_result
   PUBLIC
   CREATE PUBLIC .
 
@@ -12,7 +12,7 @@ CLASS ymj_tostringresult DEFINITION INHERITING FROM ymj_result
 
 ENDCLASS.
 
-CLASS ymj_tostringresult IMPLEMENTATION.
+CLASS ycl_tostringresult IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).

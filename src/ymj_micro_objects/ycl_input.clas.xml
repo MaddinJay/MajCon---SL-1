@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>YMJ_TOSTRINGRESULT</CLSNAME>
+    <CLSNAME>YCL_INPUT</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Fizz Result</DESCRIPT>
+    <DESCRIPT>Input</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

@@ -1,4 +1,4 @@
-CLASS ymj_buzzresult DEFINITION INHERITING FROM ymj_result
+CLASS ycl_fizzbuzzresult DEFINITION INHERITING FROM ycl_result
   PUBLIC
   CREATE PUBLIC .
 
@@ -7,10 +7,10 @@ CLASS ymj_buzzresult DEFINITION INHERITING FROM ymj_result
 
 ENDCLASS.
 
-CLASS ymj_buzzresult IMPLEMENTATION.
+CLASS ycl_fizzbuzzresult IMPLEMENTATION.
 
   METHOD convert2string.
-    result = 'Buzz'.
+    result = 'FizzBuzz'.
   ENDMETHOD.
 
 ENDCLASS.

@@ -8,25 +8,32 @@ CLASS ycl_baseaction DEFINITION
 
     METHODS constructor IMPORTING next_action TYPE REF TO ymj_if_fizzbuzzaction
                                   value       TYPE int1
-                                  result      TYPE REF TO ymj_result.
+                                  result      TYPE REF TO ycl_result.
 
   PRIVATE SECTION.
     DATA next_action TYPE REF TO ymj_if_fizzbuzzaction.
-    DATA value TYPE int1.
-    DATA result TYPE REF TO ymj_result.
+    DATA value       TYPE int1.
+    DATA result      TYPE REF TO ycl_result.
+
+    METHODS is_dividable_by_value IMPORTING input         TYPE REF TO ymj_input
+                                  RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 CLASS ycl_baseaction IMPLEMENTATION.
 
   METHOD constructor.
     me->next_action = next_action.
-    me->value = value.
-    me->result = result.
+    me->value       = value.
+    me->result      = result.
   ENDMETHOD.
 
   METHOD ymj_if_fizzbuzzaction~act.
-    result = COND #( WHEN input->int( ) MOD value = 0 THEN result
+    result = COND #( WHEN is_dividable_by_value( input ) = abap_true THEN me->result
                      ELSE next_action->act( input ) ).
+  ENDMETHOD.
+
+  METHOD is_dividable_by_value.
+    result = xsdbool( input->int( ) MOD value = 0 ).
   ENDMETHOD.
 
 

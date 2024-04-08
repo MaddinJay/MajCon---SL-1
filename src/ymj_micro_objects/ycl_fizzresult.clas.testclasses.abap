@@ -11,7 +11,7 @@ ENDCLASS.
 CLASS ltcl_fizzresult IMPLEMENTATION.
 
   METHOD should_return_string_fizz.
-    DATA(cut) = NEW ymj_fizzresult( ).
+    DATA(cut) = NEW ycl_fizzresult( ).
     cl_abap_unit_assert=>assert_equals( exp = 'Fizz' act = cut->convert2string( ) ).
   ENDMETHOD.
 

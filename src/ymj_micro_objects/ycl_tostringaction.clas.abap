@@ -11,7 +11,7 @@ ENDCLASS.
 CLASS ycl_tostringaction IMPLEMENTATION.
 
   METHOD ymj_if_fizzbuzzaction~act.
-    result = NEW ymj_tostringresult( input ).
+    result = NEW ycl_tostringresult( input ).
   ENDMETHOD.
 
 ENDCLASS.

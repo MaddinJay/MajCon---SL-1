@@ -1,4 +1,4 @@
-CLASS ymj_input DEFINITION
+CLASS ycl_input DEFINITION
   PUBLIC
   CREATE PUBLIC .
 
@@ -11,7 +11,7 @@ CLASS ymj_input DEFINITION
 
 ENDCLASS.
 
-CLASS ymj_input IMPLEMENTATION.
+CLASS ycl_input IMPLEMENTATION.
 
   METHOD constructor.
     me->raw_value = origin.

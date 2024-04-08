@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>YCL_FIZZACTION</CLSNAME>
+    <CLSNAME>YCL_BUZZRESULT</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Fizz Action</DESCRIPT>
+    <DESCRIPT>Fizz Result</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
