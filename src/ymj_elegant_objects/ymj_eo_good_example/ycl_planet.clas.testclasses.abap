@@ -1,15 +1,17 @@
-CLASS ltcl_planet_surface DEFINITION FINAL FOR TESTING
+CLASS ltcl_planet DEFINITION DEFERRED.
+CLASS ycl_planet DEFINITION LOCAL FRIENDS ltcl_planet.
+
+CLASS ltcl_planet DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
 
   PRIVATE SECTION.
-    DATA cut TYPE REF TO ycl_planet_surface.
-    METHODS:
-      should_have_one_field FOR TESTING RAISING cx_static_check.
+    DATA cut TYPE REF TO ycl_planet.
+    METHODS: should_have_one_field FOR TESTING RAISING cx_static_check.
 ENDCLASS.
 
 
-CLASS ltcl_planet_surface IMPLEMENTATION.
+CLASS ltcl_planet IMPLEMENTATION.
 
   METHOD should_have_one_field.
     cut = NEW #( planet_length = 3
