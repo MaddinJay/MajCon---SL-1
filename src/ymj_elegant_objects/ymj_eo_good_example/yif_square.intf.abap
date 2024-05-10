@@ -1,4 +1,0 @@
-INTERFACE yif_square
-  PUBLIC .
-  METHODS scan RETURNING VALUE(result) TYPE abap_bool.
-ENDINTERFACE.
