@@ -3,9 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <PROGDIR>
-    <NAME>Y_MIT_FUNCTION_PROCESSES</NAME>
-    <STATE>A</STATE>
-    <VARCL>X</VARCL>
+    <NAME>Y_MIT_EXPONENTIATION</NAME>
     <DBAPL>S</DBAPL>
     <SUBC>1</SUBC>
     <FIXPT>X</FIXPT>
@@ -15,8 +13,7 @@
    <TPOOL>
     <item>
      <ID>R</ID>
-     <ENTRY>Function processes</ENTRY>
-     <LENGTH>18</LENGTH>
+     <LENGTH>14</LENGTH>
     </item>
    </TPOOL>
   </asx:values>
