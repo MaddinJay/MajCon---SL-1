@@ -143,7 +143,7 @@ ENDCLASS.
 ```
 
 ```abap
-CLASS ltcl_neighbours DEFINITION FINAL FOR TESTING
+CLASS ltcl_neighbourhood DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
 
@@ -158,7 +158,7 @@ CLASS ltcl_neighbours DEFINITION FINAL FOR TESTING
 ENDCLASS.
 
 
-CLASS ltcl_neighbours IMPLEMENTATION.
+CLASS ltcl_neighbourhood IMPLEMENTATION.
 
   METHOD should_have_3_living_neighbour.
     cl_abap_unit_assert=>assert_equals( exp = 3
