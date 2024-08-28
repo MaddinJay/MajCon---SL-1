@@ -156,7 +156,52 @@ CLASS ycl_gol_grid IMPLEMENTATION.
     result = xsdbool( cl_abap_random=>create( )->int( ) MOD 2 = 0 ).
   ENDMETHOD.
 
-ENDCLASS.```
+ENDCLASS.
+
+CLASS ltcl_gol_grid DEFINITION DEFERRED.
+CLASS ycl_gol_grid DEFINITION LOCAL FRIENDS ltcl_gol_grid.
+
+CLASS ltcl_gol_grid DEFINITION FINAL FOR TESTING
+  DURATION SHORT
+  RISK LEVEL HARMLESS.
+
+  PRIVATE SECTION.
+    DATA cut TYPE  REF TO yif_gol_grid.
+
+    METHODS:
+      "GIVEN: Size of grid is 3 WHEN: Creating the grid THEN: Grid ...
+      should_have_nine_lines FOR TESTING,
+      "GIVEN: Size of grid is 3 WHEN: Creating the grid THEN: Last line ...
+      should_have_coordinates_3_3 FOR TESTING,
+
+      create_cut IMPORTING size          TYPE int1
+                 RETURNING VALUE(result) TYPE REF TO yif_gol_grid,
+      get_last_line_of_3x3_grid RETURNING VALUE(result) TYPE yif_gol_grid=>ts_grid.
+ENDCLASS.
+
+CLASS ltcl_gol_grid IMPLEMENTATION.
+
+  METHOD should_have_nine_lines.
+    cl_abap_unit_assert=>assert_equals( exp = 9 act = lines( create_cut( size = 3 )->grid ) ).
+  ENDMETHOD.
+
+  METHOD should_have_coordinates_3_3.
+    cl_abap_unit_assert=>assert_equals( exp = 3 act = get_last_line_of_3x3_grid( )-x ).
+    cl_abap_unit_assert=>assert_equals( exp = 3 act = get_last_line_of_3x3_grid( )-y ).
+  ENDMETHOD.
+
+  METHOD create_cut.
+    result = NEW ycl_gol_grid( ).
+    result->create( size ).
+  ENDMETHOD.
+
+  METHOD get_last_line_of_3x3_grid.
+    DATA(cut) = create_cut( size = 3 ).
+    result = cut->grid[ 9 ].
+  ENDMETHOD.
+
+ENDCLASS.
+```
 
 ```abap
 CLASS ycl_gol_neighbourhood DEFINITION
