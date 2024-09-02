@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_INTF" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOINTERF>
+    <CLSNAME>YIF_GOL_NEIGHBOURHOOD</CLSNAME>
+    <LANGU>D</LANGU>
+    <DESCRIPT>GOL - Neighbourhood</DESCRIPT>
+    <EXPOSURE>2</EXPOSURE>
+    <STATE>1</STATE>
+    <UNICODE>X</UNICODE>
+   </VSEOINTERF>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>COUNT_LIVING</CMPNAME>
+     <SCONAME>RESULT</SCONAME>
+     <LANGU>D</LANGU>
+     <DESCRIPT>Number of living neighbours</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE</CMPNAME>
+     <SCONAME>CELL_COORDINATES</SCONAME>
+     <LANGU>D</LANGU>
+     <DESCRIPT>Coordinates of cell</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE</CMPNAME>
+     <SCONAME>GRID</SCONAME>
+     <LANGU>D</LANGU>
+     <DESCRIPT>Grid which is given</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>GET_NEIGHBOURS</CMPNAME>
+     <SCONAME>RESULT</SCONAME>
+     <LANGU>D</LANGU>
+     <DESCRIPT>Neighbours of cell</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>
