@@ -1,6 +1,6 @@
 # Report ZVCDSCRAMBLE_BOOKINGS
 
-'''abap
+```abap
 ***********************************************************************
 * Identifikation
 * ----------------------------------------------------------------------
@@ -154,7 +154,7 @@ FORM f4_layout CHANGING cv_vari TYPE slis_vari.
   DATA(ls_layout_info) = cl_salv_layout_service=>f4_layouts( VALUE #( report = gc_alv_report_name ) ).
   cv_vari              = ls_layout_info-layout.
 ENDFORM.
-'''
+```
 
 # Main class ZCL_VCD_SCRAMBLE_BOOKINGS
 ```abap
