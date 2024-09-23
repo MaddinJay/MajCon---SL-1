@@ -2,6 +2,8 @@
 
 Fokus dieser Analyse ist das iXML Framwork des SAP Standards.
 
+![iXML Library](https://github.com/MaddinJay/MajCon---SL-1/blob/main/Practice%20Phase%20Summer%2024/Framework%20Analysis/UML%20Diagramm%20-%20iXML%20library.png)
+
 ## Aufbau
 
 Hauptklasse der iXML Library ist die Klasse CL_IXML, mit welcher wir über die Methode CREATE eine Instanz erzeugen können.
@@ -9,16 +11,13 @@ Hauptklasse der iXML Library ist die Klasse CL_IXML, mit welcher wir über die M
 ```abap
   DATA(ixml) = cl_ixml=>create( ).
 ```
-
-Der Typ der erzeugten Instanz wird dynmisch erzeugt und kann zur Laufzeit mit CL_IXML eingesehen werden. Die Klasse selbst existiert jedoch im ABAP Dictionary nicht, was die Übersichtlichkeit ein wenig trübt.
-
 Die API Methoden der Klasse werden via Interface implementiert, was für den Aufrufer insofern komfortable ist, als dass er die Kernlogik der Library nicht verstehen muss. Die Methoden der Klasse sind dann wiederum 
-via C++ Coding umgesetzt, welches über KERNEL MODULE eingebunden ist. Hier wird nicht weiter recherchiert.
+via C++ Coding umgesetzt, welches über KERNEL MODULE eingebunden ist. Hier wird nicht weiter recherchiert, zumal es für die Integration ins eigene Coding nicht relevant ist.
 
 Wie so oft im SAP System ist die Dokumentation der iXML library verbesserungsfähig. Die Anwendung der Klasse ergibt sich nicht intuitiv, was gewisse Experimente mit sich bringt, um die Anwendung zu verstehen und 
 nachvollziehen zu können.
 
-Beispielsweise lässt sich ein XML Dokument in Form eines XSTREAMS, gegeben einer Datei mit Excel-Tabelleninhalten wie folgt erzeugen:
+Beispielsweise lässt sich ein XML Dokument in Form eines xStrings, gegeben einer Datei mit Excel-Tabelleninhalten wie folgt erzeugen:
 
 ```abap
   DATA(streamfactory) = ixml->create_stream_factory( ).
@@ -52,7 +51,8 @@ Falls man weiss, wie die einzelnen Klassen und Methoden miteinander arbeiten, ka
 Es sind Ansätze der Trennung von Verantwortlichkeiten zu erkennen. 
 
 Z.B. kann mit Hilfe des Objekts CL_IXML eine STREAM_FACTORY erzeugt werden, welche widerum für die Erzeugung des iStreams (XML File in XString Format) 
-verantwortlich ist. Oder aber ein DOM Objekt, welches man für den Aufbau des XMLs verwenden kann (Knoten hinzufügen/löschen,...). Das macht das Handling schon einmal ein wenig angenehmer, siehe Coding oben.
+verantwortlich ist. Das macht das Handling schon einmal ein wenig angenehmer, siehe Coding oben. 
+Auch lässt sich ein Document Object Model Objekt erzeugen, welches man für den Aufbau und Handling des XMLs verwenden kann (Knoten hinzufügen/löschen,...).
 
 ```abap
 DATA(document) = ixml->create_document( ).
@@ -138,7 +138,7 @@ interface IF_IXML
       value(RVAL) type I .
 endinterface.
 ```
-Auch hier ist die Arbeit beim Entwickler einmal mehr, zu verstehen, dass die Methoden alle machen und wie sie überhaupt aufrufbar sind. 
+Auch hier ist die Arbeit beim Entwickler einmal mehr, zu verstehen, was die Methoden alle machen und wie sie überhaupt aufrufbar sind. 
 
 #### Patterns/Static Classes:
 Die Erzeugung des Hauptobjektes der Klasse CL_IXML wird mit dem Factory Pattern durchgeführt. Im Constructor selbst wird ein TYPE deklariert. Diese Deklaration sollte in die DEFINITION gezogen, besser in ein Interface ausgelagert werden.
@@ -186,9 +186,16 @@ Das Framework lässt bereits sehr viele Aspekte von gutem Software Design UP to 
 ### Keine Vererbung / Keine statischen Methoden
 Die Hauptklasse CL_IXML verletzt diese Ansätze. Besser wäre es, auf die Vererbung zu verzichten, zumal das Interface IF_IXML_UNKNOWN lediglich eine Methode besitzt. 
 
-Die Erzeugung des iXML Objektes könnte man durch einen Wrapper re alisieren.
+Auch wird das Konzept der Vererbung in der Klasse CL_IXML mit dem Konzept von Interfaces vermischt. 
 
+Das Interface IF_IXML besitzt das Interface IF_IXML_UNKNOWN, wobei die Klasse CL_IXML von der Klasse CL_IXML_UNKNOWN erbt?!
 
+Die Erzeugung des iXML Objektes könnte man durch einen Wrapper realisieren.
+
+### Atomic Design
+Atomic Design Aspekte erkenne ich nicht. Betrachtet man das Interface IF_IXML wird deutlich, dass die SChnittstelle allumfassend die notwendigen Objekte erzeugen kann, 
+welche für das Handling der iXML Objekte notwendig sind. Hier ist aber nicht zu erkennen, wann was benötigt wird, da jegliche Dokumentation fehlt. Eine klare Aufgabentrennung, 
+kann ich nicht erkennen. 
 
 
 
