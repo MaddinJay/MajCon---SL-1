@@ -179,6 +179,9 @@ public section.
 Grundsätzlich ist das Naming nicht schlecht, dennoch könnte man über Verbesserungen diskutieren. Ein Interface und eine Klasse mit dem Suffix "UNKNOWN" zu versehen,
 verwirrt doch mehr, als dass man darauf schliessen könnte, was das Objekt tut ( CL_IXML_UNKNOWN ).
 
+#### Methoden / Messaging:
+
+
 ## Analyse des Frameworks auf Basis des Wissens UP to SL
 
 Das Framework lässt bereits sehr viele Aspekte von gutem Software Design UP to PL vermissen.
