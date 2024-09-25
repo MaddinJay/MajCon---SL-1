@@ -180,7 +180,18 @@ Grundsätzlich ist das Naming nicht schlecht, dennoch könnte man über Verbesse
 verwirrt doch mehr, als dass man darauf schliessen könnte, was das Objekt tut ( CL_IXML_UNKNOWN ).
 
 #### Methoden / Messaging:
+Grundsätzlich sind für alle Objekte Interfaces angelegt, welche ausschliesslich funktionale Methoden besitzen. 
 
+Die Methoden sind als Query Methoden implementiert, welche über das Einbinden von Kernel Modulen implementiert sind. Das Coding selbst kann ich nicht einsehen. Umso mehr wäre eine saubere Dokumentation der Methoden und ihrer Verwendung sinnvoll.
+
+Positiv ist, dass die Parameter der Methoden ausschliesslich auf Interfaces referenzieren. Die Objekte werden zum Teil zur Laufzeit erzeugt, wobei die Klassen nicht im Dictionary angelegt sind, Bsp. CL_IXML_STREAM_FACTORY, CL_IXML_DOCUMENT.
+
+**Interface IF_IXML_STREAM_FACTORY:**
+Die CREATE Methoden sind je für ISTREAM und OSTREAM analog angelegt. Hier wäre es mindestens mal sinnvoll, diese Methoden in zwei Sub-Interfaces zu splitten. Der Returning Parameter ist unterschiedlich. Weil jedoch die Methoden im Kernel implementiert sind, kann ich nicht beurteilen, ob es sich hier um dubliziertes Verhalten handelt. Die Vermutung liegt nahe.
+
+**Interface IF_IXML_DOCUMENT:**
+Das Interface besitzt das Interface IF_IXML_NODE, was das Interface durch die Implementierung der ALIASES sehr mächtig erscheinen lässt. Neben sehr vielen CREATE Methoden, existieren GETTER/SETTER Methoden und FIND Methoden. Auch hier wäre ein Splitten in Sub_Interfaces sicherlich sinnvoll, um die Übersicht zu verbessern. 
+Das Interface IF_IXML_NODE müsste in das Interface hier einzubinden ergibt sich mir architektonisch nicht. Der Knoten selbst sollte unabhängig vom DOCUMENT behandelt werden.
 
 ## Analyse des Frameworks auf Basis des Wissens UP to SL
 
@@ -199,6 +210,11 @@ Die Erzeugung des iXML Objektes könnte man durch einen Wrapper realisieren.
 Atomic Design Aspekte erkenne ich nicht. Betrachtet man das Interface IF_IXML wird deutlich, dass die SChnittstelle allumfassend die notwendigen Objekte erzeugen kann, 
 welche für das Handling der iXML Objekte notwendig sind. Hier ist aber nicht zu erkennen, wann was benötigt wird, da jegliche Dokumentation fehlt. Eine klare Aufgabentrennung, 
 kann ich nicht erkennen. 
+
+Splitten der Domainlogik durch weitere Splittung der Interfaces sicherlich sinnvoll. Die Interfaces sind zu mächtig. 
+
+**Interface IF_IXML_DOCUMENT:**
+Das Interface IF_IXML_NODE und das daraus resultierende Handling der Knoten ist eine eigene Domaine, welche unabhängig zum Document laufen kann. Über das Dokument auf den Knoten zu zugreifen, ist nicht sauber.
 
 
 
