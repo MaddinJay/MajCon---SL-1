@@ -13,35 +13,42 @@ Das Framework besitzt Komponenten eines sauberen Frameworks.
 ..., dass die Klasse CL_HTTP_CLIENT als API für die HTTP Calls fungiert. Die Klasse hat drei CREATE Methoden, welche jeweils ein Objekt von TYPE IF_HTTP_CLIENT erzeugt. In sich wirkt die Klasse vollständig und ein HTTP Call kann ausschliesslich mit dieser Klasse abgesetzt werden. Es werden keine weiteren Objekte zwingend benötigt.
 
 ### Dokumentation
-Harzig. Die offizielle Dokumentation der SAP über ICF (https://help.sap.com/doc/saphelp_nw74/7.4.16/en-US/48/d40aca1904154ee10000000a421937/content.htm?no_cache=true, https://help.sap.com/doc/saphelp_snc700_ehp01/7.0.1/en-US/e5/4d350bc11411d4ad310000e83539c3/content.htm?no_cache=true, https://help.sap.com/docs/SAP_NETWEAVER_AS_ABAP_751_IP/753088fc00704d0a80e7fbd6803c8adb/0f5fb77942744afe94afafa78df57b70.html) geht zwar auf die Architektur und die Einbindung der Klasse CL_HTTP_CLIENT ein, jedoch werden praktikable und funktionierende Anwendungsbeispiele vermisst. Auch muss man sich mehrerer Dokumentationen bedienen, um einen guten Überblick über das Framework zu erhalten.
+Harzig. Die offizielle Dokumentation der SAP über [ICF](https://help.sap.com/doc/saphelp_nw74/7.4.16/en-US/48/d40aca1904154ee10000000a421937/content.htm?no_cache=true) geht zwar auf die Architektur und die Einbindung der Klasse CL_HTTP_CLIENT ein, jedoch werden praktikable und funktionierende Anwendungsbeispiele vermisst. Auch muss man sich mehrerer Dokumentationen bedienen, um einen guten Überblick über das Framework zu erhalten.
 
 Das Coding selbst ist prozedural und es werden Kommentare für das Doing gesetzt. Hier wird nicht das WHY dokumentiert, sondern das WAS. Das COding ist Spaghetti. Es werden keine Methodennamen verwendet, um die Schritte zu dokumentieren. 
 
 ### Interfaces/API
-Die Klasseninstanzen lassen sich jeweils über eine statische Constructor-Methode erzeugen (FACTORY method). Für den Caller ergibt sich die Schnittstelle aus den öffentlichen Attributen und Methoden der Super-Klasse und Sub-Klasse. Es werden keine Interfaces verwendet. Die öffentlichen Methoden sind symmetrisch deklariert über die Klassen hinweg, was die Lesbarkeit verbessert.
+Die Instanzen der Klasse CL_HTTP_CLIENT lassen sich über vier statische CREATE-Methode erzeugen (FACTORY method). Für den Caller ergibt sich die Schnittstelle primär aus dem Interface IF_HTTP_CLIENT. 
 
-Die deklarierten Konstanten und Attribute sollten besser in ein Interface ausgelagert werden, wenn sie schon öffentlich zugänglich gamacht werden. Bei den Konstanten stellt sich die Frage, ob diese wirklich zwingend öffnentlich sein müssen oder nicht doch in der Superklasse als PROTECTED deklariert werden sollten. Hier verstehe ich das Konzept aber noch zu wenig, um dies final beurteilen zu können.
+Die Klasse CL_HTTP_CLIENT besitzt keine öffentlichen Attribute. Hingegen das Interface IF_HTTP_CLIENT schon, welche essentiel für den Workflow zum Absetzen eines Requests und dem Erhalten der Response sind (Attribut REQUEST, RESPONSE). 
 
-Die Konstanten könnten je Themenblock zusammengefasst werden mit Hilfe von Strukturen. Generell würde ich diese in ein separates Interface auslagern, falls sie Klassenübergreifend genutzt werden sollen.
+Die Klasse CL_HTTP_CLIENT besitzt GLOBAL FRIENDS, was die Übersichtlichkeit der Klasse sehr trübt. Es ist nicht ersichtlich, welche Methoden und Attribute der Klassen tatsächlich Verwendung finden und wie diese ggf. einzubinden sind. 
+
+Die Klassen/Interfaces sind sehr mächtig. Ein Split in mehrere Klassen/Interfaces wäre sicherlich sinnvoll.
 
 #### Patterns/Static Classes:
-Für die Instanziierung wird je Klasse eine FACTORY Methode implementiert, was ok ist. Für die Instanziierung des Objekts wird ein Event erzeugt, dessen Deklaration in der Super-Klasse erfolgt und dessen Implementation in der Klasse selbst ausgeprägt ist. Dies wird ein wenig überkandidiert. Ich würde die Events rausnehmen und die Instanziierung des Objekts direkt im Konstruktor machen.
+Für die Instanziierung wird je Klasse eine FACTORY Methode implementiert, was ok ist. Dies macht es dem Aufrufer leicht, ein entsprechendes HTTP Objekt zu erzeugen. Wie die Konstruktor arbeiten und wie ggf. die GLOBAL FRIENDS in der Klasse wirken, wird somit hinter Schnittstelle versteckt.
 
 #### Testing:
 Es sind keine UNIT Tests implmentiert.
 
 #### Information Hiding:
-Die Attribute der Klassen sind teilweise öffentlich, so dass sie von aussen zugreifbar und änderbar sind. Diese Attribute sollten PRIVATE sein, der Zugriff hierauf über GETTER Methoden ermöglicht werden.
+Die Attribute der Klassen CL_HTTP_CLIENT, CL_HTTP_ENTITY (used for REQUEST and RESPONSE) werden über die eingebundenen Interfaces öffentlich. Diese sind mittels direkten Zugriff zugänglich. 
+Hier wäre zu überlegen, ob die Attribute nicht in der Klasse CL_HTTP_CLIENT als PRIVATE aufgenommen werden sollten und der Zugriff via GETTER/SETTER ermöglicht werden sollte.
 
 #### Naming:
-Das Naming der Klassen und Methoden ist okay. Die Methoden sind lesbar. 
+Das Naming der Klassen und Methoden ist okay. Die Methoden sind lesbar und verständlich. 
 
 #### Methoden / Messaging:
-Die Klassen besitzen sowohl Query- als auch Commands Methoden. Query Methoden werden vor allem da verwendet, wo auf C/C++ Implementation zugriffen oder aber System-Calls abgesetzt werden. 
+Queries und Commands werden nicht strikt von einander separiert. Die Klassen besitzen jedoch zumeist Commands, um den Zustand der Objekte oder die System Calls abzusetzen. 
 
-Das Coding der Methoden ist nicht übersichtlich und nicht symmetrisch angeordnet. Es fehlt jegliche Dokumentation. Die Methoden sind jedoch einigermassen klein gehalten und tun meist auch nur eine Sache (SRP). Es existieren viele Getter-Methoden - vermutlich weil von aussen auf die Objektinfos zugegriffen werden soll, um mit dem Objekt arbeiten zu können. 
+Das Coding der Methoden ist nicht übersichtlich und nicht symmetrisch angeordnet. Es fehlt jegliche Dokumentation und die Aufteilung der Schritte in den Methoden erfolgt über WAS Kommentare. 
+
+Die Methoden sind zum Teil sehr lang und daher sind sie meist nicht nur für eine Sache zuständig (SRP). 
 
 Grundsätzlich sind die Unterklassen klein gehalten. Eine weitere Kapselung in weitere Klassen wäre jedoch denkbar.
+
+Prinzipien wie "gutes Naming", IOSP, QCS sind nicht zu erkennen.
 
 ## Analyse des Frameworks auf Basis des Wissens UP to SL
 
@@ -51,19 +58,16 @@ Konzentrieren wir uns auf die Themen Atomic Design und Elegant Objects so fällt
 Die Klassen verwenden das FACTORY PATTERN, um die Objekte zu instantiieren. Hier wäre ein Wrapper denkbar, welcher die Instanziierung der einzelnen Objekte übernimmt, so dass man die Statischen Methoden und Attribute los wird.
 
 ### CONSTRUCTORS
-Im Konstruktor erfolgt die Instanziierung der Objekte via Event-Handling. Gemäss Elegant Objects sollte dies nicht erfolgen. Wir sollten lediglich Zuweisungen machen.
+Im Konstruktor der Klasse CL_HTTP_CLIENT erfolgt die Instanziierung der Hilfobjekte für den Request und der Response, inklusive der ICT Calls. Gemäss Elegant Objects sollte dies nicht erfolgen. Wir sollten lediglich Zuweisungen machen.
 
 ### VERERBUNG
-Die Super-Klasse vererbt an die einzelnen Unterklassen, was das Konstrukt auf den ersten Blick unübersichtlich erscheinen lässt. Hier könnte man gemäss Elegant Objects besser mit Interfaces arbeiten und die Logik via Interfaces splitten. 
+Es erfolgt eine Art Vererbung über das GLOBAL FRIENDS Prinzip. Es ist nicht ersichtlich, welche Objekte alle für den Workflow tatsächlich notwendig sind. Hier könnte man gemäss Elegant Objects besser mit Interfaces arbeiten und die Logik via Interfaces splitten. 
 
 ### ATOMIC DESIGN
-Durch die Auslagerung der Domainlogik in KERNEL MODULES erfolgt eine gewisse Atomisierung. Die Logik in den einzelnen Methoden könnte jedoch weiter ausgelagert werden, in spearate Klassen. 
+Durch die Verwendung der System-Calls der ICT erfolgt eine gewisse Atomisierung. Die Logik in den einzelnen Methoden könnte jedoch weiter ausgelagert werden, in spearate Klassen, Interfaces. 
 
-Z.B. könnte in der Klasse CL_ABAP_CLASSDESCR die Logik der Methode GET_FRIEND_TYPES in eine separate Klasse ausgelagert werden. 
-
+Auch die Methoden selbst sollten kürzer gehalten werden.
 
 ## Links
-- [SAP Doku inkl. Testreport](https://help.sap.com/docs/SUPPORT_CONTENT/abapobjects/3353526555.html)
-- [Beispiele Codezentrale](https://codezentrale.de/abap-rtti-rttc-rtts-verwendung-von-typdescriptoren/)
-- [Datenreferenzen](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm?file=abendata_reference_type.htm)
-- [ABAP CheatSheet](https://github.com/SAP-samples/abap-cheat-sheets/blob/main/06_Dynamic_Programming.md#runtime-type-services-rtts)
+- [Client Architecture ](https://help.sap.com/doc/saphelp_snc700_ehp01/7.0.1/en-US/e5/4d350bc11411d4ad310000e83539c3/content.htm?no_cache=true)
+- [REST Programming Tutorial](https://help.sap.com/docs/SAP_NETWEAVER_AS_ABAP_751_IP/753088fc00704d0a80e7fbd6803c8adb/0f5fb77942744afe94afafa78df57b70.html)
