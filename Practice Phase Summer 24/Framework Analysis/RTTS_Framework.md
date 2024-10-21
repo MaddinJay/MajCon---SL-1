@@ -47,7 +47,7 @@ Die Attribute der Klassen sind teilweise öffentlich, so dass sie von aussen zug
 Das Naming der Klassen und Methoden ist okay. Die Methoden sind lesbar. 
 
 #### Methoden / Messaging:
-Die Klassen besitzen sowohl Query- als auch Commands Methoden. Query Methoden werden vor allem da verwendet, wo auf C/C++ Implementation zugriffen oder aber System-Calls abgesetzt werden. 
+Die Klassen besitzen sowohl Query- als auch Commands Methoden. Command Methoden werden vor allem da verwendet, wo auf C/C++ Implementation zugriffen oder aber System-Calls abgesetzt werden. 
 
 Das Coding der Methoden ist nicht übersichtlich und nicht symmetrisch angeordnet. Es fehlt jegliche Dokumentation. Die Methoden sind jedoch einigermassen klein gehalten und tun meist auch nur eine Sache (SRP). Es existieren viele Getter-Methoden - vermutlich weil von aussen auf die Objektinfos zugegriffen werden soll, um mit dem Objekt arbeiten zu können. 
 
